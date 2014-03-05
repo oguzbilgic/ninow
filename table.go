@@ -67,3 +67,10 @@ func (t *Table) SelectAllBy(column, value string) (interface{}, error) {
 
 	return sliceOfValue.Interface(), nil
 }
+
+func (t *Table) Delete(id int) error {
+	query := "DELETE FROM " + t.name + " WHERE id =? "
+
+	_, err := t.db.Exec(query, id)
+	return err
+}
