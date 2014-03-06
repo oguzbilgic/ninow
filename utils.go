@@ -18,6 +18,26 @@ func csv(values []string) string {
 	return list
 }
 
+func csQ(n int) string {
+	questions := make([]string, n)
+	for i := 0; i < n; i++ {
+		questions[i] = "?"
+	}
+	return csv(questions)
+}
+
+func fieldValues(fields []string, value reflect.Value) []interface{} {
+	indirectValue := reflect.Indirect(value)
+
+	var values []interface{}
+	for _, field := range fields {
+		fieldValue := indirectValue.FieldByName(field).Interface()
+		values = append(values, fieldValue)
+	}
+
+	return values
+}
+
 func fieldPointers(fields []string, value reflect.Value) []interface{} {
 	indirectValue := reflect.Indirect(value)
 
@@ -57,5 +77,4 @@ func fixEdgeFieldName(fieldName string, keyword string) string {
 	weedle := strings.Index(fieldName, keyword)
 	keywordLength := len(keyword)
 	return fieldName[0:weedle+1] + strings.ToLower(fieldName[weedle+1:weedle+keywordLength]) + fieldName[weedle+keywordLength:len(fieldName)]
-
 }
