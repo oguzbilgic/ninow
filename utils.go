@@ -52,11 +52,15 @@ func fieldPointers(fields []string, value reflect.Value) []interface{} {
 }
 
 func fieldNameToColumnName(fieldName string) string {
-	//TODO add more edge cases to conform idiomatically
-	edgeCases := []string{"ID", "URL"}
+	//Fix edge cases
+	for _, keyword := range []string{"ID", "URL"} {
+		if !strings.Contains(fieldName, keyword) {
+			continue
+		}
 
-	for _, keyword := range edgeCases {
-		fieldName = fixEdgeFieldName(fieldName, keyword)
+		weedle := strings.Index(fieldName, keyword)
+		keywordLength := len(keyword)
+		fieldName = fieldName[0:weedle+1] + strings.ToLower(fieldName[weedle+1:weedle+keywordLength]) + fieldName[weedle+keywordLength:len(fieldName)]
 	}
 
 	columnName := strings.ToLower(string(fieldName[0]))
@@ -68,13 +72,4 @@ func fieldNameToColumnName(fieldName string) string {
 		}
 	}
 	return columnName
-}
-
-func fixEdgeFieldName(fieldName string, keyword string) string {
-	if !strings.Contains(fieldName, keyword) {
-		return fieldName
-	}
-	weedle := strings.Index(fieldName, keyword)
-	keywordLength := len(keyword)
-	return fieldName[0:weedle+1] + strings.ToLower(fieldName[weedle+1:weedle+keywordLength]) + fieldName[weedle+keywordLength:len(fieldName)]
 }
