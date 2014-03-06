@@ -68,6 +68,24 @@ func (t *Table) SelectAllBy(column, value string) (interface{}, error) {
 	return sliceOfValue.Interface(), nil
 }
 
+func (t *Table) Insert(row interface{}) (int, error) {
+	query := "INSERT INTO " + t.name
+	query += " (" + csv(t.columns[1:]) + ") "
+	query += " values (" + csQ(len(t.columns)-1) + ")"
+
+	res, err := t.db.Exec(query, fieldValues(t.fields[1:], reflect.ValueOf(row))...)
+	if err != nil {
+		return 0, err
+	}
+
+	id, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+
+	return int(id), nil
+}
+
 func (t *Table) Delete(id int) error {
 	query := "DELETE FROM " + t.name + " WHERE id =? "
 
