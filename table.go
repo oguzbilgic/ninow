@@ -4,6 +4,7 @@ package ninow
 import (
 	"database/sql"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -84,6 +85,18 @@ func (t *Table) Insert(row interface{}) (int, error) {
 	}
 
 	return int(id), nil
+}
+
+func (t *Table) Update(row interface{}) error {
+	values := fieldValues(t.fields, reflect.ValueOf(row))
+
+	query := "UPDATE " + t.name
+	query += " SET " + cscv(t.columns[1:], values[1:])
+	query += " WHERE id=" + strconv.Itoa(values[0].(int))
+
+	println(query)
+	_, err := t.db.Exec(query, values[1:]...)
+	return err
 }
 
 func (t *Table) Delete(id int) error {

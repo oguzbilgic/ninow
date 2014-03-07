@@ -26,6 +26,19 @@ func csQ(n int) string {
 	return csv(questions)
 }
 
+func cscv(columns []string, values []interface{}) string {
+	queryString := ""
+
+	for i, column := range columns {
+		queryString += column + "=?"
+		if i < len(columns)-1 {
+			queryString += ", "
+		}
+	}
+
+	return queryString
+}
+
 func fieldValues(fields []string, value reflect.Value) []interface{} {
 	indirectValue := reflect.Indirect(value)
 
