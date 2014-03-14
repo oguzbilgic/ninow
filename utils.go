@@ -26,7 +26,7 @@ func csQ(n int) string {
 	return csv(questions)
 }
 
-func cscv(columns []string, values []interface{}) string {
+func csc(columns []string) string {
 	queryString := ""
 
 	for i, column := range columns {

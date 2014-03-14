@@ -91,7 +91,7 @@ func (t *Table) Update(row interface{}) error {
 	values := fieldValues(t.fields, reflect.ValueOf(row))
 
 	query := "UPDATE " + t.name
-	query += " SET " + cscv(t.columns[1:], values[1:])
+	query += " SET " + csc(t.columns[1:])
 	query += " WHERE id=" + strconv.Itoa(values[0].(int))
 
 	_, err := t.db.Exec(query, values[1:]...)
