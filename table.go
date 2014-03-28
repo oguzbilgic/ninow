@@ -34,7 +34,11 @@ func TableFor(row interface{}, db *sql.DB) *Table {
 }
 
 func (t *Table) Select(id int) (interface{}, error) {
-	row := t.db.QueryRow("SELECT "+csv(t.columns)+" FROM "+t.name+" WHERE id=?", id)
+	return t.SelectBy("id", strconv.Itoa(id))
+}
+
+func (t *Table) SelectBy(column, cValue string) (interface{}, error) {
+	row := t.db.QueryRow("SELECT "+csv(t.columns)+" FROM "+t.name+" WHERE "+column+"=?", cValue)
 	value := reflect.New(t.rtype)
 	err := row.Scan(fieldPointers(t.fields, value)...)
 
