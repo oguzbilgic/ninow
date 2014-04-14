@@ -49,10 +49,13 @@ func (t *Table) SelectAllBy(column, value string) (interface{}, error) {
 	query := "SELECT " + csv(t.columns) + " FROM " + t.name
 
 	if column != "" && value != "" {
-		// TODO Make sure this line is safe
 		query += " WHERE " + column + "=" + value
 	}
 
+	return t.Query(query)
+}
+
+func (t *Table) Query(query string) (interface{}, error) {
 	rows, err := t.db.Query(query)
 	if err != nil {
 		return nil, err
