@@ -55,8 +55,8 @@ func (t *Table) SelectAllBy(column, value string) (interface{}, error) {
 	return t.Query(query)
 }
 
-func (t *Table) Query(query string) (interface{}, error) {
-	rows, err := t.db.Query(query)
+func (t *Table) Query(query string, args ...interface{}) (interface{}, error) {
+	rows, err := t.db.Query(query, args...)
 	if err != nil {
 		return nil, err
 	}
